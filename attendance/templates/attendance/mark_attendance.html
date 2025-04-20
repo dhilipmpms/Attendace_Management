@@ -1,0 +1,42 @@
+{% extends 'attendance/base.html' %}
+{% block content %}
+
+<h2 style="text-align: center; margin-bottom: 1rem;">
+    📅 Mark Attendance - <span style="color: #007bff;">{{ session.name }}</span> ({{ session.date }})
+</h2>
+
+<form method="POST" style="max-width: 800px; margin: auto;">
+    {% csrf_token %}
+    
+    {% if members %}
+        <table border="1" cellpadding="10" cellspacing="0" width="100%" style="border-collapse: collapse; text-align: center;">
+            <thead style="background-color: #f0f0f0;">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Present</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ member.name }}</td>
+                        <td>
+                            <input type="checkbox" name="present_members" value="{{ member.id }}">
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="text-align: center; margin-top: 1rem;">
+            <button type="submit" style="padding: 0.5rem 1.5rem; background-color: #28a745; color: white; border: none; border-radius: 5px;">
+                ✅ Submit Attendance
+            </button>
+        </div>
+    {% else %}
+        <p style="text-align: center;">No members available to mark attendance.</p>
+    {% endif %}
+</form>
+
+{% endblock %}

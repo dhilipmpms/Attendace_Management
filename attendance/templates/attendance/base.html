@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}CGLUG - Attendance{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Base reset and fonts */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color:rgb(255, 221, 221);
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(to right,rgb(111, 129, 148),rgb(32, 86, 101));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0 0 0.5rem;
+            font-size: 2rem;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.4rem 0.8rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background-color: white;
+            margin-top: 1rem;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🌐 CGLUG - Attendance System</h1>
+        <nav>
+            <a href="{% url 'home' %}">🏠 Home</a>
+            <a href="{% url 'add_member' %}">➕ Add Member</a>
+            <a href="{% url 'add_session' %}">🗓️ Add Session</a>
+            <a href="{% url 'calendar_view' %}">📅 View Calendar</a>
+            <a href="{% url 'member_list' %}">👥 Members</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>

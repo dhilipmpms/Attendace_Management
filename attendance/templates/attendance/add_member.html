@@ -1,0 +1,39 @@
+{% extends 'attendance/base.html' %}
+{% block content %}
+
+<h2 style="text-align: center; margin-top: 1rem;">➕ Add New Member</h2>
+
+<form method="POST" style="max-width: 500px; margin: 2rem auto; padding: 1.5rem; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+    {% csrf_token %}
+
+    <!-- Name Field -->
+    <div style="margin-bottom: 1rem;">
+        <label for="name" style="display: block; margin-bottom: 0.5rem;">👤 Member Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter member name" required
+               style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <!-- Work Field -->
+    <div style="margin-bottom: 1rem;">
+        <label for="work" style="display: block; margin-bottom: 0.5rem;">💼 Work</label>
+        <input type="text" name="work" id="work" placeholder="e.g., Developer, Student"
+               style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <!-- Phone Field -->
+    <div style="margin-bottom: 1.5rem;">
+        <label for="phone" style="display: block; margin-bottom: 0.5rem;">📞 Phone Number</label>
+        <input type="text" name="phone" id="phone" placeholder="Enter phone number"
+               style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <!-- Submit Button -->
+    <div style="text-align: center;">
+        <button type="submit"
+                style="padding: 0.5rem 1.5rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            ➕ Add Member
+        </button>
+    </div>
+</form>
+
+{% endblock %}

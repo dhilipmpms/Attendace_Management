@@ -1,0 +1,128 @@
+{% extends 'attendance/base.html' %}
+
+{% block content %}
+<style>
+    .centered-search {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .centered-search input[type="text"] {
+        padding: 6px;
+        width: 220px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .centered-search button {
+        padding: 6px 10px;
+        margin-left: 5px;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .centered-search button:hover {
+        background-color: #0056b3;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    th, td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f4f4f4;
+    }
+
+    .pagination {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .pagination a {
+        margin: 0 5px;
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .pagination a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+{% if session %}
+    <h2>{{ session.name }} - {{ session.date }}</h2>
+
+    <!-- Centered Search -->
+    <div class="centered-search">
+        <form method="get" action="">
+            <input type="text" name="search" placeholder="Search member" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <h3>Present Members:</h3>
+
+    {% if page_obj %}
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Work</th>
+                    <th>Phone</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in page_obj %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ a.member.name }}</td>
+                        <td>{{ a.member.work|default:"-" }}</td>
+                        <td>{{ a.member.phone|default:"-" }}</td>
+                        <td>
+                            <form method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete" value="{{ a.id }}">
+                                <button type="submit" onclick="return confirm('Delete this attendance?');">❌</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No matching members found.</p>
+    {% endif %}
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Prev</a>
+        {% endif %}
+
+        <strong>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</strong>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
+        {% endif %}
+    </div>
+
+{% else %}
+    <p>No session recorded for this day.</p>
+{% endif %}
+
+{% endblock %}
