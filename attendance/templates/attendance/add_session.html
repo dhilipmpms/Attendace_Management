@@ -1,0 +1,29 @@
+{% extends 'attendance/base.html' %}
+{% block content %}
+
+<h2 style="text-align: center; margin-top: 1rem;">📅 Add New Session</h2>
+
+<form method="POST" style="max-width: 500px; margin: 2rem auto; padding: 1.5rem; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
+    {% csrf_token %}
+
+    <div style="margin-bottom: 1rem;">
+        <label for="name" style="display: block; margin-bottom: 0.5rem;">📌 Session Title</label>
+        <input type="text" name="name" id="name" placeholder="Enter session title" required
+               style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <div style="margin-bottom: 1rem;">
+        <label for="date" style="display: block; margin-bottom: 0.5rem;">🗓️ Date</label>
+        <input type="date" name="date" id="date" required
+               style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <div style="text-align: center;">
+        <button type="submit"
+                style="padding: 0.5rem 1.5rem; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            ➕ Create Session
+        </button>
+    </div>
+</form>
+
+{% endblock %}
