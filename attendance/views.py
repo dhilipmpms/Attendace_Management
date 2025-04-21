@@ -100,3 +100,12 @@ def member_list(request):
         'members': members_paginated,
         'search_query': search_query,
     })
+    
+def edit_member(request, member_id):
+    member = get_object_or_404(Member, pk=member_id)
+    if request.method == 'POST':
+        member.name = request.POST['name']
+        member.work = request.POST.get('work', '')
+        member.phone = request.POST.get('phone', '')
+        member.save()
+    return redirect('member_list')

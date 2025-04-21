@@ -64,17 +64,25 @@
     <h2>{{ session.name }} - {{ session.date }}</h2>
 
     <!-- Centered Search -->
-    <div class="centered-search">
+    {% comment %} <div class="centered-search">
         <form method="get" action="">
             <input type="text" name="search" placeholder="Search member" value="{{ search_query }}">
             <button type="submit">Search</button>
         </form>
-    </div>
+    </div> {% endcomment %}
+    <form method="GET" action="{% url 'member_list' %}" style="margin-bottom: 1.5rem;">
+        {% comment %} <input type="text" name="search" value="{{ search_query }}" placeholder="Search members"
+               style="padding: 10px; width: 400px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;" /> {% endcomment %}
+               <input type="text" id="memberSearch" placeholder="🔍 Search members..." style="margin-bottom: 1rem; padding: 0.5rem; width: 100%; max-width: 400px;">
+
+        <button type="submit" style="padding: 10px 20px; font-size: 16px; border-radius: 5px;">🔍 Search</button>
+    </form>
+</center>
 
     <h3>Present Members:</h3>
 
     {% if page_obj %}
-        <table>
+        <table id="memberTable">
             <thead>
                 <tr>
                     <th>#</th>
@@ -124,5 +132,23 @@
 {% else %}
     <p>No session recorded for this day.</p>
 {% endif %}
+<script>
+    document.getElementById('memberSearch').addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('#memberTable tbody tr');
+
+        rows.forEach(row => {
+            const rowText = row.innerText.toLowerCase();
+            if (query === "") {
+                row.style.display = "";
+            } else if (rowText.includes(query)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
+
 
 {% endblock %}
