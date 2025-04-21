@@ -27,17 +27,31 @@ def add_session(request):
         return redirect('home')
     return render(request, 'attendance/add_session.html')
 
+
 def mark_attendance(request, session_id):
     session = get_object_or_404(Session, id=session_id)
     members = Member.objects.all()
+
     if request.method == "POST":
         present_ids = request.POST.getlist('present_members')
-        Attendance.objects.filter(session=session).delete()  # reset
+
         for member in members:
             is_present = str(member.id) in present_ids
-            Attendance.objects.create(session=session, member=member, is_present=is_present)
+            attendance, created = Attendance.objects.get_or_create(session=session, member=member)
+            attendance.is_present = is_present
+            attendance.save()
+
         return redirect('calendar_view')
-    return render(request, 'attendance/mark_attendance.html', {'session': session, 'members': members})
+
+    # Preselect those already present
+    present_ids = Attendance.objects.filter(session=session, is_present=True).values_list('member_id', flat=True)
+
+    return render(request, 'attendance/mark_attendance.html', {
+        'session': session,
+        'members': members,
+        'present_ids': list(present_ids),
+    })
+
 
 def calendar_view(request):
     days = [date.today() - timedelta(days=i) for i in range(0, 30)]
