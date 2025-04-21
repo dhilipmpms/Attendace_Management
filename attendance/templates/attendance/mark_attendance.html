@@ -8,6 +8,11 @@
 <center>
     <input type="text" id="memberSearch" placeholder="🔍 Search members..."
         style="margin-bottom: 1.5rem; padding: 0.5rem; width: 90%; max-width: 400px; border-radius: 5px; border: 1px solid #ccc;">
+        <select name="filter" onchange="this.form.submit()" style="padding: 0.5rem; border-radius: 5px; margin-left: 1rem;">
+            <option value="all" {% if filter_type == 'all' %}selected{% endif %}>All</option>
+            <option value="present" {% if filter_type == 'present' %}selected{% endif %}>✅ Present</option>
+            <option value="absent" {% if filter_type == 'absent' %}selected{% endif %}>❌ Absent</option>
+        </select>
 </center>
 
 <form method="POST" style="max-width: 1000px; margin: auto;">
@@ -48,6 +53,15 @@
         <p style="text-align: center;">No members available to mark attendance.</p>
     {% endif %}
 </form>
+<div style="text-align: center; margin-top: 1rem;">
+    <a href="{% url 'export_attendance_excel' session.id %}" style="background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
+        📥 Export to Excel
+    </a>
+    <a href="{% url 'export_attendance_pdf' session.id %}" style="margin-left: 1rem; background-color: #6c757d; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
+        🧾 Export PDF
+    </a>
+</div>
+
 
 <script>
     document.getElementById('memberSearch').addEventListener('input', function () {
