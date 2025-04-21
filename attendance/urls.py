@@ -10,4 +10,8 @@ urlpatterns = [
     path('attendance/<str:date>/', views.attendance_detail, name='attendance_detail'),
     path('members/', views.member_list, name='member_list'),
     path('members/edit/<int:member_id>/', views.edit_member, name='edit_member'),
+    path('attendance/export/<int:session_id>/', views.export_attendance_excel, name='export_attendance_excel'),
+    path('attendance/export-pdf/<int:session_id>/', views.export_attendance_pdf, name='export_attendance_pdf'),
+    path('export-member-pdf/', views.export_member_pdf, name='export_member_pdf'),  # URL for exporting PDF
+
 ]

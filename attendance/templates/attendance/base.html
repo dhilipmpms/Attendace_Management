@@ -76,6 +76,22 @@
         </nav>
         <hr>
     </header>
+    {% if messages %}
+    <div id="toast" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+        {% for message in messages %}
+            <div style="background: #4CAF50; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 10px; font-weight: bold;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        setTimeout(() => {
+            const toast = document.getElementById('toast');
+            if (toast) toast.style.display = 'none';
+        }, 3000);
+    </script>
+{% endif %}
+
 
     <main>
         {% block content %}

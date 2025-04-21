@@ -70,6 +70,7 @@
             <button type="submit">Search</button>
         </form>
     </div> {% endcomment %}
+<center>
     <form method="GET" action="{% url 'member_list' %}" style="margin-bottom: 1.5rem;">
         {% comment %} <input type="text" name="search" value="{{ search_query }}" placeholder="Search members"
                style="padding: 10px; width: 400px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;" /> {% endcomment %}
@@ -132,6 +133,15 @@
 {% else %}
     <p>No session recorded for this day.</p>
 {% endif %}
+<div style="text-align: center; margin-top: 1rem;">
+    <a href="{% url 'export_attendance_excel' session.id %}" style="background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
+        📥 Export to Excel
+    </a>
+    <a href="{% url 'export_attendance_pdf' session.id %}" style="margin-center: 1rem; background-color: #6c757d; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
+        🧾 Export PDF
+    </a>
+</div>
+
 <script>
     document.getElementById('memberSearch').addEventListener('input', function () {
         const query = this.value.toLowerCase().trim();

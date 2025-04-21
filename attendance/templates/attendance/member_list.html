@@ -97,6 +97,16 @@
         </div>
     </form>
 </div>
+<br>
+<div style="text-align: center; margin-bottom: 1rem;">
+    <a href="?search={{ search_query }}&export=excel" style="padding: 8px 12px; background-color: #28a745; color: white; border-radius: 5px; text-decoration: none;">📤 Export Excel</a>
+    {% comment %} <a href="?search={{ search_query }}&export=pdf" style="padding: 8px 12px; background-color: #dc3545; color: white; border-radius: 5px; text-decoration: none;">🧾 Export PDF</a> {% endcomment %}
+    <a href="{% url 'export_member_pdf' %}" target="_blank" class="btn btn-outline-primary"
+     style="padding: 8px 12px; background-color: #dc3545; color: white; border-radius: 5px; text-decoration: none;">🧾 Export PDF
+    </a>
+</div>
+
+
 
 <script>
 function toggleDropdown(id) {
