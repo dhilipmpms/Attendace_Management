@@ -5,15 +5,22 @@
     📅 Mark Attendance - <span style="color: #007bff;">{{ session.name }}</span> ({{ session.date }})
 </h2>
 
-<form method="POST" style="max-width: 800px; margin: auto;">
+<center>
+    <input type="text" id="memberSearch" placeholder="🔍 Search members..."
+        style="margin-bottom: 1.5rem; padding: 0.5rem; width: 90%; max-width: 400px; border-radius: 5px; border: 1px solid #ccc;">
+</center>
+
+<form method="POST" style="max-width: 1000px; margin: auto;">
     {% csrf_token %}
     
     {% if members %}
-        <table border="1" cellpadding="10" cellspacing="0" width="100%" style="border-collapse: collapse; text-align: center;">
+        <table id="memberTable" border="1" cellpadding="10" cellspacing="0" width="100%" style="border-collapse: collapse; text-align: center;">
             <thead style="background-color: #f0f0f0;">
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Work</th>
+                    <th>Phone</th>
                     <th>Present</th>
                 </tr>
             </thead>
@@ -22,8 +29,11 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ member.name }}</td>
+                        <td>{{ member.work|default:"-" }}</td>
+                        <td>{{ member.phone|default:"-" }}</td>
                         <td>
-                            <input type="checkbox" name="present_members" value="{{ member.id }}">
+                            <input type="checkbox" name="present_members" value="{{ member.id }}"
+                                   {% if member.id in present_ids %}checked{% endif %}>
                         </td>
                     </tr>
                 {% endfor %}
@@ -38,5 +48,17 @@
         <p style="text-align: center;">No members available to mark attendance.</p>
     {% endif %}
 </form>
+
+<script>
+    document.getElementById('memberSearch').addEventListener('input', function () {
+        const query = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('#memberTable tbody tr');
+
+        rows.forEach(row => {
+            const rowText = row.innerText.toLowerCase();
+            row.style.display = rowText.includes(query) ? "" : "none";
+        });
+    });
+</script>
 
 {% endblock %}
