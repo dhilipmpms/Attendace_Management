@@ -8,8 +8,10 @@
 <!-- Search form -->
 <center>
     <form method="GET" action="{% url 'member_list' %}" style="margin-bottom: 1.5rem;">
-        <input type="text" name="search" value="{{ search_query }}" placeholder="Search members"
-               style="padding: 10px; width: 400px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;" />
+        {% comment %} <input type="text" name="search" value="{{ search_query }}" placeholder="Search members"
+               style="padding: 10px; width: 400px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;" /> {% endcomment %}
+               <input type="text" id="memberSearch" placeholder="🔍 Search members..." style="margin-bottom: 1rem; padding: 0.5rem; width: 100%; max-width: 400px;">
+
         <button type="submit" style="padding: 10px 20px; font-size: 16px; border-radius: 5px;">🔍 Search</button>
     </form>
 </center>
@@ -17,7 +19,7 @@
 <!-- Members Table -->
 {% if members %}
     <div style="display: flex; justify-content: center;">
-        <table border="1" cellpadding="8" cellspacing="0" width="70%" style="font-size: 14px;">
+        <table id="memberTable" border="1" cellpadding="8" cellspacing="0" width="70%" style="font-size: 14px;">
             <thead style="background-color: #f0f0f0;">
                 <tr>
                     <th>#</th>
@@ -35,10 +37,17 @@
                         <td>{{ member.phone|default:"-" }}</td>
                         <td>{{ member.work|default:"-" }}</td>
                         <td>
-                            <form method="POST" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" name="delete" value="{{ member.id }}">Delete  ❌ </button>
-                              </form>
+                            <div style="position: relative;">
+                                <button onclick="toggleDropdown({{ member.id }})" style="padding: 0.3rem 0.8rem;">Click</button>
+                                <div id="dropdown-{{ member.id }}" style="display: none; position: absolute; background: white; border: 1px solid #ccc; z-index: 10;">
+                                    <button onclick="openEditModal({{ member.id }}, '{{ member.name }}', '{{ member.work }}', '{{ member.phone }}')">✏️ Edit</button><br>
+                                    <form method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" name="delete" value="{{ member.id }}">Delete  ❌ </button>
+                                      </form>
+                                </div>
+                            </div>
+                            
                         </td>
                     </tr>
                 {% endfor %}
@@ -64,6 +73,73 @@
     {% endif %}
 </div>
 
+<!-- Edit Member Modal -->
+<div id="editModal" style="display: none; position: fixed; top: 10%; left: 50%; transform: translateX(-50%); background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid #ccc; z-index: 999; box-shadow: 0px 0px 15px rgba(0,0,0,0.3);">
+    <h3 style="text-align: center;">✏️ Edit Member</h3>
+    <form id="editForm" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="member_id" id="editMemberId">
+        <div style="margin-bottom: 1rem;">
+            <label>👤 Name:</label>
+            <input type="text" name="name" id="editName" required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label>💼 Work:</label>
+            <input type="text" name="work" id="editWork" style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 1rem;">
+            <label>📞 Phone:</label>
+            <input type="text" name="phone" id="editPhone" style="width: 100%;">
+        </div>
+        <div style="text-align: center;">
+            <button type="submit" style="background: #28a745; color: white; padding: 0.5rem 1rem;">✅ Update</button>
+            <button type="button" onclick="closeEditModal()" style="margin-left: 1rem;">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script>
+function toggleDropdown(id) {
+    const dropdown = document.getElementById('dropdown-' + id);
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+}
+
+function openEditModal(id, name, work, phone) {
+    document.getElementById('editMemberId').value = id;
+    document.getElementById('editName').value = name;
+    document.getElementById('editWork').value = work;
+    document.getElementById('editPhone').value = phone;
+
+    const form = document.getElementById('editForm');
+    form.action = `/members/edit/${id}/`; 
+    document.getElementById('editModal').style.display = 'block';
+}
+
+function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+document.getElementById('memberSearch').addEventListener('input', function () {
+    const query = this.value.toLowerCase().trim();
+    const rows = document.querySelectorAll('#memberTable tbody tr');
+
+    rows.forEach(row => {
+        const rowText = row.innerText.toLowerCase();
+        if (query === "") {
+            row.style.display = "";
+        } else if (rowText.includes(query)) {
+            row.style.display = "";
+        } else {
+            row.style.display = "none";
+        }
+    });
+});
+
+</script>
+
+
+
 {% endblock %}
+
 
 
