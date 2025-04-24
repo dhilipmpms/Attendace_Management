@@ -25,4 +25,4 @@ class Attendance(models.Model):
     is_present = models.BooleanField(default=False)
     
     def __str__(self):
-        return self.member
+        return str(self.member)

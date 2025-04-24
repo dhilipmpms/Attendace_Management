@@ -133,14 +133,22 @@
 {% else %}
     <p>No session recorded for this day.</p>
 {% endif %}
+
+{% if session.id %}
 <div style="text-align: center; margin-top: 1rem;">
     <a href="{% url 'export_attendance_excel' session.id %}" style="background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
         📥 Export to Excel
     </a>
-    <a href="{% url 'export_attendance_pdf' session.id %}" style="margin-center: 1rem; background-color: #6c757d; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
+    <a href="{% url 'export_attendance_pdf' session.id %}" style="margin-left: 1rem; background-color: #6c757d; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
         🧾 Export PDF
     </a>
 </div>
+{% else %}
+<div style="text-align: center; color: red; margin-top: 1rem;">
+    <strong>⚠️ Export links unavailable – session ID not found.</strong>
+</div>
+{% endif %}
+
 
 <script>
     document.getElementById('memberSearch').addEventListener('input', function () {
