@@ -90,7 +90,7 @@ def attendance_detail(request, date):
     ).select_related('member')
 
     # Pagination
-    paginator = Paginator(attendance_list, 50)  # Adjust per page count as needed
+    paginator = Paginator(attendance_list, 100)  # Adjust per page count as needed
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -156,7 +156,7 @@ def member_list(request):
 
     # ======= Normal View with Pagination =======
     page = request.GET.get('page', 1)
-    paginator = Paginator(members, 50)
+    paginator = Paginator(members, 100)
     members_paginated = paginator.get_page(page)
 
     return render(request, 'attendance/member_list.html', {
