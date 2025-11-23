@@ -8,6 +8,8 @@
 
     Responsive Design: Clean and intuitive UI for ease of use
 
+    Multi Space : Able to use multi Attendance with one App 
+
 🛠️ Technologies Used
 
     Backend: Django
