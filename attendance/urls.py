@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('spaces/', views.choose_space, name='choose_space'),   # 🔹 NEW
+
     path('add-member/', views.add_member, name='add_member'),
     path('add-session/', views.add_session, name='add_session'),
     path('mark-attendance/<int:session_id>/', views.mark_attendance, name='mark_attendance'),
@@ -12,6 +14,5 @@ urlpatterns = [
     path('members/edit/<int:member_id>/', views.edit_member, name='edit_member'),
     path('attendance/export/<int:session_id>/', views.export_attendance_excel, name='export_attendance_excel'),
     path('attendance/export-pdf/<int:session_id>/', views.export_attendance_pdf, name='export_attendance_pdf'),
-    path('export-member-pdf/', views.export_member_pdf, name='export_member_pdf'),  # URL for exporting PDF
-
+    path('export-member-pdf/', views.export_member_pdf, name='export_member_pdf'),
 ]

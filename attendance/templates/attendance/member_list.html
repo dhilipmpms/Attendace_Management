@@ -3,8 +3,10 @@
 
 {% block content %}
 
-<h1 style="text-align: center;">🙋 Members List</h1>
-
+<h1 style="text-align: center;">
+    🙋 Members List
+    {% if space %}<br><span style="font-size:0.9em;color:#555;">Space: {{ space.name }}</span>{% endif %}
+</h1>
 <!-- Search form -->
 <center>
     <form method="GET" action="{% url 'member_list' %}" style="margin-bottom: 1.5rem;">
@@ -25,7 +27,7 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Phone</th>
-                    <th>Work</th>
+                    <th>Proffesionf</th>
                     <th>Action</th>
                 </tr>
             </thead>

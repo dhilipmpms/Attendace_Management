@@ -3,8 +3,10 @@
 
  {% block content %}
 
-<h2>Attendance Calendar</h2>
-<ul>
+<h2 style="text-align:center;">
+    Attendance Calendar
+    {% if space %}<br><span style="font-size:0.9em;color:#555;">Space: {{ space.name }}</span>{% endif %}
+</h2><ul>
     {% for day in days %}
         <li>
             <a href="{% url 'attendance_detail' day|date:'Y-m-d' %}">

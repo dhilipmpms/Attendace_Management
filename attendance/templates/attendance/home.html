@@ -1,64 +1,69 @@
-{% extends 'attendance/base.html' %}
+    {% extends 'attendance/base.html' %}
 
-{% block content %}
-<style>
-    .sessions-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
-    }
+    {% block content %}
+<h2>📅 Recent Sessions{% if space %} — <span style="font-size:0.9em;color:#555;">Space: {{ space.name }}</span>{% endif %}</h2>
+...
 
-    .session-card {
-        background-color: #ffffff;
-        border-radius: 12px;
-        padding: 1rem 1.5rem;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-        transition: transform 0.2s ease;
-    }
 
-    .session-card:hover {
-        transform: translateY(-5px);
-    }
 
-    .session-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #333;
-    }
+    <style>
+        .sessions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
 
-    .session-date {
-        font-size: 0.95rem;
-        color: #666;
-        margin-bottom: 1rem;
-    }
+        .session-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+            transition: transform 0.2s ease;
+        }
 
-    .mark-btn {
-        display: inline-block;
-        background-color: #007bff;
-        color: white;
-        padding: 0.4rem 0.8rem;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-    }
+        .session-card:hover {
+            transform: translateY(-5px);
+        }
 
-    .mark-btn:hover {
-        background-color: #0056b3;
-    }
-</style>
+        .session-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
 
-<h2>📅 Recent Sessions</h2>
+        .session-date {
+            font-size: 0.95rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
 
-<div class="sessions-container">
-    {% for session in sessions %}
-        <div class="session-card">
-            <div class="session-title">{{ session.name }}</div>
-            <div class="session-date">{{ session.date }}</div>
-            <a href="{% url 'mark_attendance' session.id %}" class="mark-btn">✅ Mark Attendance</a>
-        </div>
-    {% endfor %}
-</div>
-{% endblock %}
+        .mark-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .mark-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <h2>📅 Recent Sessions</h2>
+
+    <div class="sessions-container">
+        {% for session in sessions %}
+            <div class="session-card">
+                <div class="session-title">{{ session.name }}</div>
+                <div class="session-date">{{ session.date }}</div>
+                <a href="{% url 'mark_attendance' session.id %}" class="mark-btn">✅ Mark Attendance</a>
+            </div>
+        {% endfor %}
+    </div>
+    {% endblock %}

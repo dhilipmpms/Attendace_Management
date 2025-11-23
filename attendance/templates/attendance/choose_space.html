@@ -1,0 +1,53 @@
+{% extends 'attendance/base.html' %}
+
+{% block title %}Choose Space - CGLUG Attendance{% endblock %}
+
+{% block content %}
+<h2 style="text-align:center;">🧑‍💻 Choose User Space</h2>
+
+{% if current_space %}
+    <p style="text-align:center;">
+        Current space:
+        <strong>{{ current_space.name }}</strong>
+    </p>
+{% else %}
+    <p style="text-align:center;color:red;">
+        No space selected yet.
+    </p>
+{% endif %}
+
+<div style="max-width: 500px; margin: 1.5rem auto; padding: 1rem; background:#fff; border-radius:10px; border:1px solid #ddd;">
+    <h3>Existing Spaces</h3>
+    <form method="post">
+        {% csrf_token %}
+        <ul style="list-style:none; padding:0;">
+            {% for space in spaces %}
+                <li style="margin-bottom:0.5rem;">
+                    <button type="submit" name="space_id" value="{{ space.id }}"
+                            style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #ccc; cursor:pointer;">
+                        {{ forloop.counter }}. {{ space.name }}
+                        {% if current_space and space.id == current_space.id %}
+                            (current)
+                        {% endif %}
+                    </button>
+                </li>
+            {% empty %}
+                <li>No spaces yet.</li>
+            {% endfor %}
+        </ul>
+    </form>
+</div>
+
+<div style="max-width: 500px; margin: 1.5rem auto; padding: 1rem; background:#fff; border-radius:10px; border:1px solid #ddd;">
+    <h3>Create New Space</h3>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="new_space_name" placeholder="e.g., Main, Second, Third"
+               style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid #ccc; margin-bottom:0.5rem;" required>
+        <button type="submit"
+                style="width:100%; padding:0.5rem; background:#007bff; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+            ➕ Create & Use
+        </button>
+    </form>
+</div>
+{% endblock %}

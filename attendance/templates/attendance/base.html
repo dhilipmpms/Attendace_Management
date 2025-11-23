@@ -3,14 +3,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}CGLUG - Attendance{% endblock %}</title>
+    <title>
+        {% block title %}CGLUG - Attendance{% endblock %}
+    </title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
-        /* Base reset and fonts */
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color:rgb(255, 221, 221);
+            background-color: rgb(255, 221, 221);
             color: #333;
         }
 
@@ -31,6 +32,7 @@
             flex-wrap: wrap;
             gap: 1rem;
             font-size: 1rem;
+            align-items: center;
         }
 
         nav a {
@@ -44,6 +46,16 @@
 
         nav a:hover {
             background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .space-info {
+            margin-left: auto;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .space-info strong {
+            text-transform: capitalize;
         }
 
         hr {
@@ -60,25 +72,42 @@
         @media (max-width: 600px) {
             nav {
                 flex-direction: column;
+                align-items: flex-start;
+            }
+            .space-info {
+                margin-left: 0;
             }
         }
     </style>
 </head>
 <body>
     <header>
-
-        {% comment %} <h1> <img src="{% static '/attendance/img/cglug-logo.png' %}" alt="Cglug logo"> CGLUG - Attendance System</h1> {% endcomment %}
         <h1>🌐 CGLUG - Attendance System</h1>
-        
+
         <nav>
             <a href="{% url 'home' %}">🏠 Home</a>
             <a href="{% url 'add_member' %}">➕ Add Member</a>
             <a href="{% url 'add_session' %}">🗓️ Add Session</a>
             <a href="{% url 'calendar_view' %}">📅 View Calendar</a>
             <a href="{% url 'member_list' %}">👥 Members</a>
+
+            <!-- 🔹 User Space Button -->
+            <a href="{% url 'choose_space' %}">🧑‍💻 User Space</a>
+
+            <!-- 🔹 Current Space Name (works with 'space' OR 'current_space') -->
+            <div class="space-info">
+                {% if space %}
+                    Current Space: <strong>{{ space.name }}</strong>
+                {% elif current_space %}
+                    Current Space: <strong>{{ current_space.name }}</strong>
+                {% else %}
+                    Current Space: <strong>Not selected</strong>
+                {% endif %}
+            </div>
         </nav>
         <hr>
     </header>
+
     {% if messages %}
     <div id="toast" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
         {% for message in messages %}
@@ -93,12 +122,10 @@
             if (toast) toast.style.display = 'none';
         }, 3000);
     </script>
-{% endif %}
-
+    {% endif %}
 
     <main>
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 </body>
 </html>

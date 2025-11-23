@@ -61,24 +61,25 @@
 </style>
 
 {% if session %}
-    <h2>{{ session.name }} - {{ session.date }}</h2>
+    <h2>
+        {{ session.name }} - {{ session.date }}
+        {% if space %}
+            <span style="font-size:0.9em;color:#555;">(Space: {{ space.name }})</span>
+        {% endif %}
+    </h2>
 
-    <!-- Centered Search -->
-    {% comment %} <div class="centered-search">
-        <form method="get" action="">
-            <input type="text" name="search" placeholder="Search member" value="{{ search_query }}">
-            <button type="submit">Search</button>
+    <!-- Search box -->
+    <center>
+        <form method="GET" action="{% url 'member_list' %}" style="margin-bottom: 1.5rem;">
+            <input type="text" id="memberSearch"
+                   placeholder="🔍 Search members..."
+                   style="margin-bottom: 1rem; padding: 0.5rem; width: 100%; max-width: 400px;">
+            <button type="submit"
+                    style="padding: 10px 20px; font-size: 16px; border-radius: 5px;">
+                🔍 Search
+            </button>
         </form>
-    </div> {% endcomment %}
-<center>
-    <form method="GET" action="{% url 'member_list' %}" style="margin-bottom: 1.5rem;">
-        {% comment %} <input type="text" name="search" value="{{ search_query }}" placeholder="Search members"
-               style="padding: 10px; width: 400px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc;" /> {% endcomment %}
-               <input type="text" id="memberSearch" placeholder="🔍 Search members..." style="margin-bottom: 1rem; padding: 0.5rem; width: 100%; max-width: 400px;">
-
-        <button type="submit" style="padding: 10px 20px; font-size: 16px; border-radius: 5px;">🔍 Search</button>
-    </form>
-</center>
+    </center>
 
     <h3>Present Members:</h3>
 
@@ -104,7 +105,10 @@
                             <form method="post" style="display:inline;">
                                 {% csrf_token %}
                                 <input type="hidden" name="delete" value="{{ a.id }}">
-                                <button type="submit" onclick="return confirm('Delete this attendance?');">❌</button>
+                                <button type="submit"
+                                        onclick="return confirm('Delete this attendance?');">
+                                    ❌
+                                </button>
                             </form>
                         </td>
                     </tr>
@@ -119,54 +123,59 @@
     <div class="pagination">
         {% if page_obj.has_previous %}
             <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
-            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Prev</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                Prev
+            </a>
         {% endif %}
 
         <strong>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</strong>
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                Next
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                Last
+            </a>
         {% endif %}
     </div>
 
-{% else %}
-    <p>No session recorded for this day.</p>
-{% endif %}
+    <!-- Export buttons -->
+    <div style="text-align: center; margin-top: 1rem;">
+        <a href="{% url 'export_attendance_excel' session.id %}?filter=present"
+           style="background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
+            📥 Export to Excel
+        </a>
+        <a href="{% url 'export_attendance_pdf' session.id %}?filter={{ filter_type }}"
+           style="margin-left: 1rem; background-color: #6c757d; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
+            🧾 Export PDF
+        </a>
+    </div>
 
-{% if session.id %}
-<div style="text-align: center; margin-top: 1rem;">
-    <a href="{% url 'export_attendance_excel' session.id %}" style="background-color: #007bff; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
-        📥 Export to Excel
-    </a>
-    <a href="{% url 'export_attendance_pdf' session.id %}" style="margin-left: 1rem; background-color: #6c757d; color: white; padding: 0.5rem 1rem; border-radius: 5px; text-decoration: none;">
-        🧾 Export PDF
-    </a>
-</div>
 {% else %}
-<div style="text-align: center; color: red; margin-top: 1rem;">
-    <strong>⚠️ Export links unavailable – session ID not found.</strong>
-</div>
+    <p>
+        No session recorded for this day.
+        {% if space %}(Space: {{ space.name }}){% endif %}
+    </p>
 {% endif %}
-
 
 <script>
-    document.getElementById('memberSearch').addEventListener('input', function () {
-        const query = this.value.toLowerCase().trim();
-        const rows = document.querySelectorAll('#memberTable tbody tr');
+    const searchInput = document.getElementById('memberSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const query = this.value.toLowerCase().trim();
+            const rows = document.querySelectorAll('#memberTable tbody tr');
 
-        rows.forEach(row => {
-            const rowText = row.innerText.toLowerCase();
-            if (query === "") {
-                row.style.display = "";
-            } else if (rowText.includes(query)) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
+            rows.forEach(row => {
+                const rowText = row.innerText.toLowerCase();
+                if (!query || rowText.includes(query)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
         });
-    });
+    }
 </script>
-
 
 {% endblock %}

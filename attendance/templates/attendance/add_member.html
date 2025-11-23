@@ -1,7 +1,10 @@
 {% extends 'attendance/base.html' %}
 {% block content %}
 
-<h2 style="text-align: center; margin-top: 1rem;">➕ Add New Member</h2>
+<h2 style="text-align: center; margin-top: 1rem;">
+    ➕ Add New Member
+    {% if space %}<br><span style="font-size:0.9em;color:#555;">Space: {{ space.name }}</span>{% endif %}
+</h2>
 
 <form method="POST" style="max-width: 500px; margin: 2rem auto; padding: 1.5rem; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9;">
     {% csrf_token %}
@@ -15,7 +18,7 @@
 
     <!-- Work Field -->
     <div style="margin-bottom: 1rem;">
-        <label for="work" style="display: block; margin-bottom: 0.5rem;">💼 Work</label>
+        <label for="work" style="display: block; margin-bottom: 0.5rem;">💼 Proffesion</label>
         <input type="text" name="work" id="work" placeholder="e.g., Developer, Student"
                style="width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 5px;">
     </div>
