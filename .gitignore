@@ -1,0 +1,14 @@
+# Django database
+db.sqlite3
+*.sqlite3
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.env
+
+# OS junk
+.DS_Store
